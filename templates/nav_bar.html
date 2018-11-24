@@ -1,0 +1,7 @@
+<ul>
+  <h2 id="sideBannerHeader">Muscles</h2>
+  {% for i in muscles %}
+  <a href="{{url_for('view_exercises', muscle_name = i.name)}}">{{ i.name }}</a>
+  <br>
+  {% endfor %}
+</ul>

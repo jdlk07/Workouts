@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='css/style.css') }}">
+    <meta charset="utf-8">
+    <title>Workouts</title>
+  </head>
+  <body>
+    <div class="main">
+      <div class="banner">
+        <h1 id="title">Exercises</h1>
+        <button id="login" type="button" name="login">Login</button>
+      </div>
+      <div class="bodyContainer">
+        <div class="sideBanner">
+          <ul>
+            <h2 id="sideBannerHeader">Body Parts</h2>
+            {% for i in muscles %}
+            <a href="{{url_for('view_exercises', muscle_name = i.name)}}">{{ i.name }}</a>
+            <br>
+            {% endfor %}
+          </ul>
+        </div>
+        <div id="content">
+          <form class="" action="{{url_for('delete_exercise', muscle_name = muscle.name, exercise_name = exercise.name)}}" method = "POST">
+            <p>Are you sure you want to delete "{{exercise.name}}"?</p>
+            <input type="submit" name="" value="Delete">
+            <br>
+            <a href="{{url_for('view_exercise', muscle_name = muscle.name, exercise_name = exercise.name)}}">Cancel</a>
+
+
+          </form>
+
+        </div>
+      </div>
+
+    </div>
+  </body>
+</html>

@@ -1,0 +1,90 @@
+/* * {
+  border: 2px solid red;
+} */
+
+body {
+  max-width: 960px;
+  margin: auto;
+  font-family: Sans-serif;
+}
+
+
+.banner {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+  align-items: center;
+  max-width: auto;
+  max-height: 100px;
+  background-color: #333333;
+  text-align: center;
+  overflow: hidden;
+  position: static;
+  border-radius: 10px;
+}
+
+#login {
+  height: 20px;
+  margin-left: 200px;
+  flex-basis:: 20px;
+  margin-right: 5%;
+  background-color: transparent;
+  border: 0px;
+  color: white;
+}
+
+#login:hover {
+  color: black;
+}
+
+#title {
+  color: white;
+  text-align: center;
+  margin-right: 10%;
+
+}
+
+.bodyContainer {
+
+}
+
+.sideBanner {
+  background-color: Blue;
+  width: 20%;
+  height: 100vh;
+  float:left;
+  display: block;
+  border-radius: 10px;
+  margin-top: 5px;
+}
+
+
+.sideBanner a {
+  text-decoration: none;
+  color: white;
+}
+
+a:hover {
+  color: black;
+}
+
+.sideBanner ul {
+  padding-left: 10px;
+  line-height: 40px;
+}
+
+.sideBanner li{
+  list-style: none;
+}
+
+.sideBanner h2 {
+  text-decoration: underline;
+}
+
+.content p {
+  float: right;
+  width: 600px;
+  position: absolute;
+  display: block;
+  margin-left: 20%;
+}
