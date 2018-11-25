@@ -13,7 +13,11 @@
     <div class="main">
       <div class="banner">
         <h1 id="title">Exercises</h1>
-        <button id="login" type="button" name="login">Login</button>
+        {%if 'username' not in session %}
+        <a id="login" href="{{url_for('showLogin')}}">Login</a>
+        {% else %}
+        <a id="login" href="{{url_for('disconnect')}}">Disconnect</a>
+        {% endif %}
       </div>
       <div class="bodyContainer">
         <div class="sideBanner">
@@ -67,6 +71,71 @@
                   }
                 }
               </script>
+            </div>
+            <div class="facebook">
+              <div id="fb-root"></div>
+              <!-- <script>(function(d, s, id) {
+                var js, fjs = d.getElementsByTagName(s)[0];
+                if (d.getElementById(id)) return;
+                js = d.createElement(s); js.id = id;
+                js.src = 'https://connect.facebook.net/en_US/sdk.js#xfbml=1&version=v3.2&appId=201904204061830&autoLogAppEvents=1';
+                fjs.parentNode.insertBefore(js, fjs);
+              }(document, 'script', 'facebook-jssdk'));</script> -->
+              <script>
+                window.fbAsyncInit = function() {
+                  FB.init({
+                    appId      : '201904204061830',
+                    cookie     : true,
+                    xfbml      : true,
+                    version    : 'v3.2'
+                  });
+
+                  FB.AppEvents.logPageView();
+
+                };
+
+                (function(d, s, id){
+                   var js, fjs = d.getElementsByTagName(s)[0];
+                   if (d.getElementById(id)) {return;}
+                   js = d.createElement(s); js.id = id;
+                   js.src = "https://connect.facebook.net/en_US/sdk.js";
+                   fjs.parentNode.insertBefore(js, fjs);
+                 }(document, 'script', 'facebook-jssdk'));
+
+                 function sendTokenToServer() {
+                   var access_token = FB.getAuthResponse()['accessToken'];
+                   console.log(access_token)
+                   console.log('Welcome! Fetching your information..O.o...');
+                   FB.api('/me', function(response) {
+                     console.log('Successful login for: ' + response.name);
+                     $.ajax({
+                       type: 'POST',
+                       url: '/fbconnect?state={{STATE}}',
+                       processData: false,
+                       data: access_token,
+                       contentType: 'application/octet-steam; charset=utf-8',
+                       success: function(result) {
+                         if (result) {
+                           $('#result').html('Login Successful!</br>' + '</br>Redirecting...O.o..')
+                           setTimeout(function() {
+                             window.location.href = "/";
+                           }, 4000);
+                         } else {
+                           $('#result').html('Failed to make a server-side call. Check your configuration and console O.o');
+                         }
+                       }
+                     });
+                   });
+                 }
+              </script>
+
+
+                <fb:login-button scope="public_profile,email" onlogin="sendTokenToServer();">
+                <a href='javascript:sendTokenToServer()'>Login with Facebook</a>
+                </fb:login-button>
+
+
+              <div class="fb-login-button" data-max-rows="1" data-size="large" data-button-type="continue_with" data-show-faces="false" data-auto-logout-link="false" data-use-continue-as="false"></div>
             </div>
         </div>
       </div>
