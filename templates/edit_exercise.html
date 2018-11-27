@@ -6,38 +6,42 @@
     <title>Workouts</title>
   </head>
   <body>
+    <div class="banner">
+      <a id ="home" href="{{url_for('main')}}">Home</a>
+      <h1 id="title">Exercises</h1>
+      {%if 'username' not in session %}
+      <a id="login" href="{{url_for('showLogin')}}">Login</a>
+      {% else %}
+      <a id="login" href="{{url_for('disconnect')}}">Disconnect</a>
+      {% endif %}
+    </div>
     <div class="main">
-      <div class="banner">
-        <h1 id="title">Exercises</h1>
-        {%if 'username' not in session %}
-        <a id="login" href="{{url_for('showLogin')}}">Login</a>
-        {% else %}
-        <a id="login" href="{{url_for('disconnect')}}">Disconnect</a>
-        {% endif %}
-      </div>
       <div class="bodyContainer">
         <div class="sideBanner">
-          <ul>
-            <h2 id="sideBannerHeader">Body Parts</h2>
+            <h2 id="sideBannerHeader">Muscles</h2>
             {% for i in muscles %}
             <a href="{{url_for('view_exercises', muscle_name = i.name)}}">{{ i.name }}</a>
-            <br>
             {% endfor %}
-          </ul>
         </div>
-        <div id="content">
-          <form class="" action="{{url_for('edit_exercise', muscle_name = muscle.name, exercise_name = exercise.name)}}" method = "POST">
-            <p>Enter a new name for "{{exercise.name}}":</p>
-            <input type="text" name="name" placeholder="{{exercise.name}}">
-            <p>Enter a new description for "{{exercise.name}}":</p>
-            <input type="text" name="description" placeholder="{{exercise.description}}">
-            <input type="submit" name="" value="Submit">
-            <br>
-            <a href="{{url_for('view_exercise', muscle_name = muscle.name, exercise_name = exercise.name)}}">Cancel</a>
+        <div class="content">
+          <div id="content-header">
+            <h2>Edit An Exercise</h2>
+          </div>
+          <div class="content-body">
+            <form  action="{{url_for('edit_exercise', muscle_name = muscle.name, exercise_name = exercise.name)}}" method = "POST">
+              <div class="form">
+                <p>Enter a new name for "{{exercise.name}}":</p>
+                <input type="text" name="name" placeholder="{{exercise.name}}">
+                <p>Enter a new description for "{{exercise.name}}":</p>
+                <textarea name="description" placeholder="{{exercise.description}}"></textarea>
+              </div>
+              <div class="submitCancel">
+                <input id="submit" type="submit" name="" value="Submit">
+                <a id="cancel" href="{{url_for('view_exercise', muscle_name = muscle.name, exercise_name = exercise.name)}}">Cancel</a>
+              </div>
 
-
-          </form>
-
+            </form>
+          </div>
         </div>
       </div>
 

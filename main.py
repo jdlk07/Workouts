@@ -35,6 +35,25 @@ muscles = session.query(BodyParts).order_by('name').all()
 def main():
     return render_template('index.html', muscles = muscles)
 
+@app.route('/json')
+def all_json():
+    Items = []
+    for muscle in muscles:
+        exercises = session.query(Exercises).filter_by(bodyPart_id=muscle.id).order_by('name').all()
+        ExerciseItems = []
+        for exercise in exercises:
+            ExerciseItem = {
+            'name' : exercise.name,
+            'muscle' : muscle.name,
+            'description' : exercise.description}
+            ExerciseItems.append(ExerciseItem)
+        Item = {
+        'muscle' : muscle.name,
+        'exercises' : ExerciseItems
+        }
+        Items.append(Item)
+    return jsonify(Items)
+
 @app.route('/login')
 def showLogin():
     state = ''.join(random.choice(string.ascii_uppercase + string.digits) for x in xrange(32))
@@ -155,7 +174,7 @@ def gconnect():
     stored_access_token = login_session.get('access_token')
     stored_gplus_id = login_session.get('gplus_id')
     if stored_access_token is not None and gplus_id == stored_gplus_id:
-        response = make_response(json.dumps('Current user is already connected homie.'), 200)
+        response = make_response(json.dumps('Current user is already logged in.'), 200)
         response.headers['Content-Type'] = 'application/json'
         return response
 
@@ -181,13 +200,13 @@ def gconnect():
     login_session['user_id'] = user_id
 
     output = ''
-    output += '<h1>Welcome, '
+    output += '<p>Welcome, '
     output += login_session['username']
-    output += '!</h1>'
+    output += '!</p>'
     output += '<img src="'
     output += login_session['picture']
-    output += ' " style="Width: 300px; height: 300px;border-radius: 15-px;-webkit-border-radius: 150px;-mox-border-radius: 150px;>"'
-    flash("you are now logged in as %s my man!" % login_session['username'])
+    output += ' " style="Width: 150px; height: 150px;border-radius: 15-px;-webkit-border-radius: 150px;-mox-border-radius: 150px;>"'
+    flash("you are now logged in as %s!" % login_session['username'])
     print "Done with validation!"
     return output
 
@@ -271,15 +290,20 @@ def disconnect():
 def view_exercises(muscle_name):
     muscle = session.query(BodyParts).filter_by(name = muscle_name).one()
     exercises = session.query(Exercises).filter_by(bodyPart_id = muscle.id).all()
-    json = []
+    return render_template('exercises.html', exercises = exercises, muscle = muscle, muscles = muscles)
+
+@app.route('/<muscle_name>/exercises/json', methods=['GET'])
+def view_exercises_json(muscle_name):
+    muscle = session.query(BodyParts).filter_by(name = muscle_name).one()
+    exercises = session.query(Exercises).filter_by(bodyPart_id = muscle.id).all()
+    Items = []
     for exercise in exercises:
         item = {
-        'name':exercise.name,
-        'muscle':muscle.name,
-        'description':exercise.description}
-        json.append(item)
-    return render_template('exercises.html', exercises = exercises, muscle = muscle, muscles = muscles, json = json)
-
+        'name' : exercise.name,
+        'muscle' : muscle.name,
+        'description' : exercise.description}
+        Items.append(item)
+    return jsonify(Items)
 
 @app.route('/<muscle_name>/exercises/<exercise_name>', methods = ['GET'])
 def view_exercise(muscle_name, exercise_name):
@@ -291,16 +315,31 @@ def view_exercise(muscle_name, exercise_name):
     else:
         return render_template('view_exercise.html', exercise = exercise, muscles = muscles, muscle = muscle, creator = creator)
 
+@app.route('/<muscle_name>/exercises/<exercise_name>/json')
+def view_exercise_json(muscle_name, exercise_name):
+    exercise = session.query(Exercises).filter_by(name = exercise_name).one()
+    muscle = session.query(BodyParts).filter_by(name = muscle_name).one()
+    return jsonify({
+    'name':exercise.name,
+    'muscle':muscle.name,
+    'description':exercise.description})
+
 @app.route('/<muscle_name>/exercises/add', methods = ['GET', 'POST'])
 def add_exercise(muscle_name):
     muscle = session.query(BodyParts).filter_by(name = muscle_name).one()
     if 'username' not in login_session:
+        flash("You need to log in to add an exercise")
         return redirect('/login')
     if request.method == 'POST':
-        NewExercise = Exercises(name = request.form['name'], description = request.form['description'], bodyPart_id = muscle.id, user_id=login_session['user_id'])
-        session.add(NewExercise)
-        session.commit()
-        return redirect(url_for('view_exercises', muscle_name = muscle_name))
+        if request.form['name'] == "" or request.form['description'] =="":
+            flash("Name or Description can not be blank")
+            return render_template('add_exercise.html', muscle = muscle, muscles = muscles)
+        else:
+            NewExercise = Exercises(name = request.form['name'], description = request.form['description'], bodyPart_id = muscle.id, user_id=login_session['user_id'])
+            session.add(NewExercise)
+            session.commit()
+            flash("Your exercise has been added!")
+            return redirect(url_for('view_exercises', muscle_name = muscle_name))
     else:
         return render_template('add_exercise.html', muscle = muscle, muscles = muscles)
 
@@ -311,6 +350,7 @@ def edit_exercise(muscle_name, exercise_name):
     exercise = session.query(Exercises).filter_by(name = exercise_name).one()
     ItemToEdit = exercise
     if 'username' not in login_session:
+        flash("You need to login to do that!")
         return redirect('/login')
     if ItemToEdit.user_id != login_session['user_id']:
         return "<script>function myFunction() {alert('You are not authorized to edit this exercise as it does not belong to you!');}</script><body onload='myFunction()''>"
@@ -322,6 +362,7 @@ def edit_exercise(muscle_name, exercise_name):
         session.add(ItemToEdit)
         session.commit()
         print "The SQL Entry was Edited Succesfully!"
+        flash("Exercise has been updated!")
         return redirect(url_for('view_exercise', muscle_name = muscle_name, exercise_name = exercise.name))
     else:
         return render_template('edit_exercise.html', muscle = muscle, exercise = exercise, muscles = muscles)
@@ -332,6 +373,7 @@ def delete_exercise(muscle_name, exercise_name):
     exercise = session.query(Exercises).filter_by(name = exercise_name).one()
     ItemToDelete = exercise
     if 'username' not in login_session:
+        flash("You need to login to do that!")
         return redirect('/login')
     if ItemToDelete.user_id != login_session['user_id']:
         return "<script>function myFunction() {alert('You are not authorized to delete this exercise as it does not belong to you!');}</script><body onload='myFunction()''>"
@@ -344,25 +386,15 @@ def delete_exercise(muscle_name, exercise_name):
         return render_template('delete_exercise.html', muscle = muscle, exercise = exercise, muscles = muscles)
 
 
-@app.route('/<muscle_name>/exercises/<int:exercise_id>/json')
-def view_exercise_json(bodyPart_id, exercise_id):
-    exercise = session.query(Exercises).filter_by(id = exercise_id).one()
-    muscle = session.query(BodyParts).filter_by(id = bodyPart_id).one()
-    return jsonify({
-    'name':exercise.name,
-    'muscle':muscle.name,
-    'description':exercise.description})
+# @app.route('/<muscle_name>/exercises/<int:exercise_id>/json')
+# def view_exercise_json(bodyPart_id, exercise_id):
+#     exercise = session.query(Exercises).filter_by(id = exercise_id).one()
+#     muscle = session.query(BodyParts).filter_by(id = bodyPart_id).one()
+#     return jsonify({
+#     'name':exercise.name,
+#     'muscle':muscle.name,
+#     'description':exercise.description})
 
-
-@app.route('/<muscle_name>/exercises/new' , methods=['GET','POST'])
-def new_exercise(bodyPart_id):
-    body_part = session.query(BodyParts).filter_by(id = bodyPart_id).one()
-    if request.method == 'POST':
-        NewExercise = Exercises(name = request.form['name'], description = request.form['description'], bodyPart_id = bodyPart_id)
-        session.add(NewExercise)
-        session.commit()
-        flash("New Exercise Added!")
-        return redirect(url_for())
 
 
 

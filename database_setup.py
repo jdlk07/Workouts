@@ -51,7 +51,6 @@ class BodyParts(Base):
 
 	@property
 	def serialize(self):
-	    """Return object data in easily serializeable format"""
 	    return {
 	    'name' : self.name
 	        }
@@ -65,6 +64,7 @@ class Exercises(Base):
     bodyPart = relationship(BodyParts)
     user_id = Column(Integer, ForeignKey('user.id'))
     user = relationship(User)
+
 
 engine = create_engine('sqlite:///exercises.db')
 

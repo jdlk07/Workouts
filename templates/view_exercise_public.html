@@ -6,32 +6,33 @@
     <title>Workouts</title>
   </head>
   <body>
+    <div class="banner">
+      <a id ="home" href="{{url_for('main')}}">Home</a>
+      <h1 id="title">Exercises</h1>
+      {%if 'username' not in session %}
+      <a id="login" href="{{url_for('showLogin')}}">Login</a>
+      {% else %}
+      <a id="login" href="{{url_for('disconnect')}}">Disconnect</a>
+      {% endif %}
+    </div>
     <div class="main">
-      <div class="banner">
-        <h1 id="title">Exercises</h1>
-        {%if 'username' not in session %}
-        <a id="login" href="{{url_for('showLogin')}}">Login</a>
-        {% else %}
-        <a id="login" href="{{url_for('disconnect')}}">Disconnect</a>
-        {% endif %}
-      </div>
       <div class="bodyContainer">
         <div class="sideBanner">
-          <ul>
             <h2 id="sideBannerHeader">Muscles</h2>
             {% for i in muscles %}
             <a href="{{url_for('view_exercises', muscle_name = i.name)}}">{{ i.name }}</a>
-            <br>
             {% endfor %}
-          </ul>
         </div>
-        <div id="content">
+        <div class="content">
           <div id="content-header">
             <h2>{{ exercise.name}}</h2>
+            <a href="{{url_for('view_exercise_json', exercise_name = exercise.name, muscle_name = muscle.name)}}">JSON</a>
           </div>
-          <p>Description:  {{exercise.description}}</p>
-          <p>Created by: {{creator.username}}</p>
-          <img src="{{creator.picture}}" style="Width: 50px; height: 50px;border-radius: 15-px;-webkit-border-radius: 150px;-mox-border-radius: 150px;">
+          <div class="content-body">
+            <p>Description:  {{exercise.description}}</p>
+            <p>Created by: {{creator.username}}</p>
+            <img src="{{creator.picture}}" style="Width: 50px; height: 50px;border-radius: 15-px;-webkit-border-radius: 150px;-mox-border-radius: 150px;">
+        </div>
         </div>
       </div>
 
