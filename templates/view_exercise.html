@@ -33,7 +33,7 @@
               </ul>
             {% endif %}
           {% endwith %}
-        </div>        
+        </div>
         <div class="content">
           <div id="content-header">
             <h2>{{ exercise.name}}</h2>
@@ -42,10 +42,10 @@
             <a href="{{url_for('delete_exercise', exercise_name = exercise.name, muscle_name = muscle.name)}}">Delete</a>
           </div>
           <div class="content-body">
-            <p>Description:  {{exercise.description}}</p>
-            <!-- <a href="{{url_for('edit_exercise', exercise_name = exercise.name, muscle_name = muscle.name)}}">Edit</a>
-            <a href="{{url_for('delete_exercise', exercise_name = exercise.name, muscle_name = muscle.name)}}">Delete</a> -->
-            <p>Created by: {{creator.username}}</p>
+            <h4>Description:</h4>
+            <p>{{exercise.description}}</p>
+            <h4>Created by:</h4>
+            <p>{{creator.username}}</p>
             <img src="{{creator.picture}}" style="Width: 50px; height: 50px;border-radius: 15-px;-webkit-border-radius: 150px;-mox-border-radius: 150px;">
         </div>
         </div>

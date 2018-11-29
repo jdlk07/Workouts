@@ -36,7 +36,11 @@ body {
   color: white;
   bottom: 35%;
   text-decoration: none;
+}
 
+#home:hover, #login:hover {
+  color: rgba(36, 128, 235, 0.9);
+  font-weight: bold;
 }
 
 #home {
@@ -163,7 +167,7 @@ body {
 
 .content textarea {
   height: 300px;
-  width: 100%;
+  width: 90%;
   padding: 8px;
 }
 

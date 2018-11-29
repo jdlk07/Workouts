@@ -28,7 +28,7 @@
             <h2>Confirm Deletion Of Exercise</h2>
           </div>
           <div class="content-body">
-            <form class="form" action="{{url_for('delete_exercise', muscle_name = muscle.name, exercise_name = exercise.name)}}" method = "POST">
+            <form class="form" action="{{url_for('delete_exercise', muscle_name = muscle.name, exercise_name = exercise.name, STATE = STATE)}}" method = "POST">
               <p>Are you sure you want to delete "{{exercise.name}}"?</p>
               <div class="submitCancel">
                 <input id="submit" type="submit" name="" value="Delete">

@@ -29,8 +29,10 @@
             <a href="{{url_for('view_exercise_json', exercise_name = exercise.name, muscle_name = muscle.name)}}">JSON</a>
           </div>
           <div class="content-body">
-            <p>Description:  {{exercise.description}}</p>
-            <p>Created by: {{creator.username}}</p>
+            <h4>Description:</h4>
+            <p>{{exercise.description}}</p>
+            <h4>Created by:</h4>
+            <p>{{creator.username}}</p>
             <img src="{{creator.picture}}" style="Width: 50px; height: 50px;border-radius: 15-px;-webkit-border-radius: 150px;-mox-border-radius: 150px;">
         </div>
         </div>
