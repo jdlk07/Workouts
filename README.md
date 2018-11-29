@@ -19,6 +19,12 @@ The software used to configure your virtual machine allowing you to share files 
 * ### Database Setup
 The database is already set up however if you would like to start with a fresh database, run the ```database_setup.py``` file by executing ```python database_setup.py``` from your terminal. A database entitled ```exercises.db``` will be created.
 
+## Instructions
+* Run the ```main.py``` file via Python by using the following command ```python2.7 main.py```. The server is configured to run on port ```8000```. Visit http://localhost:8000 and the site should appear.
+* The application can be run from either your main terminal or via your vagrant machine.
+
+## Notes
+* If you would like to change the port that the file is run on, change line ```502``` ```port=8000``` to your desired port.
 
 ## Python Version
 

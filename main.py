@@ -65,14 +65,15 @@ def all_json():
         ExerciseItems = []
         for exercise in exercises:
             ExerciseItem = {
-            'name': exercise.name,
-            'muscle': muscle.name,
-            'description': exercise.description}
+                'name': exercise.name,
+                'muscle': muscle.name,
+                'description': exercise.description
+                }
             ExerciseItems.append(ExerciseItem)
         Item = {
-        'muscle': muscle.name,
-        'exercises': ExerciseItems
-        }
+            'muscle': muscle.name,
+            'exercises': ExerciseItems
+            }
         Items.append(Item)
     return jsonify(Items)
 
@@ -296,7 +297,8 @@ def view_exercises(muscle_name):
         .filter_by(name=muscle_name)
         .one()
         )
-    exercises = (session.query(Exercises)
+    exercises = (
+        session.query(Exercises)
         .filter_by(bodyPart_id=muscle.id)
         .all()
         )
@@ -321,9 +323,10 @@ def view_exercises_json(muscle_name):
     Items = []
     for exercise in exercises:
         item = {
-        'name': exercise.name,
-        'muscle': muscle.name,
-        'description': exercise.description}
+            'name': exercise.name,
+            'muscle': muscle.name,
+            'description': exercise.description
+            }
         Items.append(item)
     return jsonify(Items)
 
@@ -368,9 +371,10 @@ def view_exercise_json(muscle_name, exercise_name):
         .one()
         )
     return jsonify({
-    'name': exercise.name,
-    'muscle': muscle.name,
-    'description': exercise.description})
+        'name': exercise.name,
+        'muscle': muscle.name,
+        'description': exercise.description
+        })
 
 
 @app.route('/<muscle_name>/exercises/add', methods=['GET', 'POST'])
