@@ -3,6 +3,8 @@ A simple user generated exercise website. The website allows users to navigate b
 
 The site uses a sqlite database along with python and flask to render HTML webpages.
 
+Feel free to visit the site at http://www.13.127.13.230.xip.io
+
 
 ## Prerequisites
 
