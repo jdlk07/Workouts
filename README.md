@@ -31,3 +31,11 @@ The database is already set up however if you would like to start with a fresh d
 ## Python Version
 
 Program is run using Python 2.7.12
+
+# Connection Information
+
+### IP Address
+* 13.127.13.230
+
+### SSH Port
+* 2200
