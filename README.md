@@ -46,7 +46,7 @@ IP Address ```13.127.13.230```
 
 SSH Port ```2200```
 
-## Notes / Resources / Useful Links
+# Notes / Resources / Useful Links
 * If you would like to change the port that the file is run on when running locally directly from the ```main.py``` file, change line ```502``` ```port=8000``` to your desired port.
 * [SSH connection issues](https://www.digitalocean.com/community/tutorials/ssh-essentials-working-with-ssh-servers-clients-and-keys)
 * [Understanding SSH Keypairs](https://winscp.net/eng/docs/ssh_keys)
